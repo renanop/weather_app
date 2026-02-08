@@ -1,6 +1,6 @@
 import requests
 
-def request_weather_api(url, endpoint, **kwargs):
+def request_api(url, endpoint, **kwargs):
     """
     Make a request on the Weather Forecast API. Use args as request params
     
