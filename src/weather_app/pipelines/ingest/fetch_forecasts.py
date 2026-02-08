@@ -3,17 +3,25 @@ from pathlib import Path
 import pandas as pd
 # Project scripts, pathes and env variables
 from weather_app.utils.request_api import request_api
-from weather_app.configs import  RAW_DATA_DIR, COORDINATES_PATH, FORECAST_URL, FORECASTS_ENDPOINT, FORECAST_DAYS, HOURLY_VARIABLES
+from weather_app.configs import  RAW_FORECASTS_PATH, COORDINATES_PATH, REQUEST_FORECASTS_CONFIG
 from weather_app.utils.wrangling import join_column_text
+from weather_app.utils.writers import save_json
+from weather_app.schemas import APIConfig
 
 # Fetch data from each location
-def fetch_forecasts(
-        input_path: Path, 
-        output_dir: Path
-        ) ->None: 
-    """
-    Fetches forecasts data from the Open Weather api
-    """
+def get_forecasts(
+        input_path: Path,
+        config: APIConfig 
+        ) -> dict: 
+    """ Get forecast data from API.
+
+    Args:
+        input_path (Path): Path to location coordinates data
+        config (APIConfig): Config object with request parameters
+
+    Returns:
+        dict: response data
+    """ 
 
     # Reading coordinates and extracting necessary variables
     coordinates_df = pd.read_csv(input_path)
@@ -24,23 +32,33 @@ def fetch_forecasts(
 
     # Iterate over coordinate files to get data for requesting the open meteo api.
     response = request_api(
-            url=FORECAST_URL, endpoint=FORECASTS_ENDPOINT, latitude=latitudes, 
-            longitude=longitudes, hourly=HOURLY_VARIABLES, forecast_days=FORECAST_DAYS
+            url=config.url, endpoint=config.endpoint, latitude=latitudes, 
+            longitude=longitudes, hourly=config.hourly_vars, forecast_days=config.days
         )
     
     # Writing city names to each item in the list of api responses
     for i, city in enumerate(cities):
         response[i]["city"]=city
 
-    # Creating folder if it does not exist
-    output_dir.mkdir(exist_ok=True)
+    return response
 
-    # Creating the file path
-    file_path = output_dir / "forecasts.json"
 
-    # # Write data to json file
-    with open(file_path, "w") as json_file:
-        json.dump(response, json_file)
+
+def run_get_forecasts_pipeline(input_path:Path, output_path:Path)->None:
+    """Encapsulates get forecast pipeline logic
+
+    Args:
+        input_path (Path): input path to location coordinate data
+        output_path (Path): writing path to response data
+    """    
+
+    # get forecast data
+    response = get_forecasts(input_path=input_path, config=REQUEST_FORECASTS_CONFIG)
+
+    # write data to output path
+    save_json(data=response, output_path=output_path)
+
+
 
 if __name__ == '__main__':
-    fetch_forecasts(input_path=COORDINATES_PATH, output_dir=RAW_DATA_DIR)
+    run_get_forecasts_pipeline(input_path=COORDINATES_PATH, output_path=RAW_FORECASTS_PATH)
