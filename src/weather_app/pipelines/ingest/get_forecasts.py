@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 # Project scripts, pathes and env variables
-from weather_app.utils.request_api import request_api
+from weather_app.utils.readers import request_api
 from weather_app.configs import  RAW_FORECASTS_PATH, COORDINATES_PATH, REQUEST_FORECASTS_CONFIG
 from weather_app.utils.wrangling import join_column_text
 from weather_app.utils.writers import save_json
