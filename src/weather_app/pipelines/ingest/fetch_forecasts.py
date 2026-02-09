@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 import pandas as pd
 # Project scripts, pathes and env variables

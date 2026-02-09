@@ -1,9 +1,7 @@
 import pandas as pd
 from pathlib import Path
-import json 
 from weather_app.configs import RAW_FORECASTS_PATH, TRANSFORMED_FORECASTS_PATH
 import pyarrow as pa
-import pyarrow.parquet as pq
 from weather_app.schemas import FORECASTS_TABLE_SCHEMA
 from weather_app.utils.writers import save_parquet
 from weather_app.utils.readers import read_json

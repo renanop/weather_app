@@ -1,5 +1,4 @@
 from pathlib import Path
-from dataclasses import dataclass
 from weather_app.schemas import APIConfig
 
 
