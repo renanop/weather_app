@@ -30,7 +30,7 @@ def get_forecasts(
     cities=coordinates_df["city"]
 
 
-    # Iterate over coordinate files to get data for requesting the open meteo api.
+    # Requests forecasts data from the api
     response = request_api(
             url=config.url, endpoint=config.endpoint, latitude=latitudes, 
             longitude=longitudes, hourly=config.hourly_vars, forecast_days=config.days
@@ -44,7 +44,7 @@ def get_forecasts(
 
 
 
-def run_get_forecasts_pipeline(input_path:Path, output_path:Path)->None:
+def run_get_forecasts_pipeline(input_path:Path, output_path:Path, config: APIConfig)->None:
     """Encapsulates get forecast pipeline logic
 
     Args:
@@ -53,7 +53,7 @@ def run_get_forecasts_pipeline(input_path:Path, output_path:Path)->None:
     """    
 
     # get forecast data
-    response = get_forecasts(input_path=input_path, config=REQUEST_FORECASTS_CONFIG)
+    response = get_forecasts(input_path=input_path, config=config)
 
     # write data to output path
     save_json(data=response, output_path=output_path)
@@ -61,4 +61,4 @@ def run_get_forecasts_pipeline(input_path:Path, output_path:Path)->None:
 
 
 if __name__ == '__main__':
-    run_get_forecasts_pipeline(input_path=COORDINATES_PATH, output_path=RAW_FORECASTS_PATH)
+    run_get_forecasts_pipeline(input_path=COORDINATES_PATH, output_path=RAW_FORECASTS_PATH, config=REQUEST_FORECASTS_CONFIG)
