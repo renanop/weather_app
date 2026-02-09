@@ -11,11 +11,16 @@ def request_api(
         retry_strategy_obj:RetryStrategy, 
         **kwargs
         )-> dict:
-    """
-    Make a request on the Weather Forecast API. Use args as request params
-    
-    :param args: Parameters for the request on the Weather Forecast API
-    """
+    """ Encapsulates api get requests and retry logic
+
+    Args:
+        url (str): Target url for request
+        endpoint (str): Target endpoint
+        retry_strategy_obj (RetryStrategy): A object that contains parameters to the Retry urllib3 class
+
+    Returns:
+        dict: request response
+    """    
     # Building full url
     full_url = url + endpoint
 
@@ -36,7 +41,7 @@ def request_api(
     session.mount("https://", adapter)  
     session.mount("http://", adapter)  
 
-    # Making Request
+    # Making request
     response = session.get(url = full_url, params=params)
     response = response.json()
 
