@@ -2,7 +2,7 @@ from pathlib import Path
 import pandas as pd
 # Project scripts, pathes and env variables
 from weather_app.utils.readers import request_api
-from weather_app.configs import  RAW_FORECASTS_PATH, COORDINATES_PATH, REQUEST_FORECASTS_CONFIG
+from weather_app.configs import  RAW_FORECASTS_PATH, COORDINATES_PATH, REQUEST_FORECASTS_CONFIG, RETRY_STRATEGY
 from weather_app.utils.wrangling import join_column_text
 from weather_app.utils.writers import save_json
 from weather_app.schemas import APIConfig
@@ -31,8 +31,9 @@ def get_forecasts(
 
     # Requests forecasts data from the api
     response = request_api(
-            url=config.url, endpoint=config.endpoint, latitude=latitudes, 
-            longitude=longitudes, hourly=config.hourly_vars, forecast_days=config.days
+            url=config.url, endpoint=config.endpoint, retry_strategy_obj=RETRY_STRATEGY,
+            latitude=latitudes, longitude=longitudes, hourly=config.hourly_vars, 
+            forecast_days=config.days
         )
     
     # Writing city names to each item in the list of api responses

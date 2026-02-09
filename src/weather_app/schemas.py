@@ -9,6 +9,13 @@ class APIConfig:
     days: int
     hourly_vars: str
 
+@dataclass(frozen=True)  # frozen=True -> imutable
+class RetryStrategy:
+    """Data class to config the Retry object from urllib3"""
+    total_retries: int
+    backoff_factor: float
+    status_forcelist: list
+    allowed_methods: list
 
 # Forecasts table schema
 FORECASTS_TABLE_SCHEMA = pa.schema([

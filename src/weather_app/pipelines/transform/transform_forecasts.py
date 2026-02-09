@@ -54,6 +54,12 @@ def run_transform_forecasts_pipeline(input_path: Path, output_path:Path, schema:
 
     # Runs transformations
     df = transform_forecasts(data=data)
+    print(
+        df[df["city"]=="Rio de Janeiro"].head()
+    )
+    print(
+        df[df["city"]=="Juiz de Fora"].head()
+    )
 
     # Writes to destination path enforcing schema
     save_parquet(data=df, output_path=output_path, schema=schema)
