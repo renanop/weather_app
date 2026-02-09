@@ -27,7 +27,7 @@ def transform_forecasts(
         df = pd.DataFrame()
 
         # Grab each weather variable and its contents and transform them into pd.DataFrame columns.
-        for k, v in data[0]["hourly"].items():
+        for k, v in item["hourly"].items():
             df[k] = v
         df["city"] = item["city"]
         df_list.append(df)
@@ -35,7 +35,7 @@ def transform_forecasts(
     # Concatenate all pd.DataFrames to get the final df.
     df = pd.concat(df_list)
 
-   # Converting dates to datetime format and enforcing schema
+   # Converting dates to datetime format
     df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%dT%H:%M")
 
     return df
