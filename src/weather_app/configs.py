@@ -7,8 +7,14 @@ from weather_app.schemas import RetryStrategy
 REQUEST_FORECASTS_CONFIG = APIConfig(
     url="https://api.open-meteo.com/",
     endpoint="/v1/forecast/",
-    days=14,
-    hourly_vars="temperature_2m,precipitation_probability,precipitation"
+    hourly_vars="temperature_2m,precipitation_probability,precipitation",
+    days=14
+)
+
+REQUEST_ACTUALS_CONFIG = APIConfig(
+    url="https://archive-api.open-meteo.com/",
+    endpoint="/v1/archive/",
+    hourly_vars="temperature_2m,precipitation"
 )
 
 # Retry config object
@@ -40,6 +46,7 @@ REFINED_DATA_DIR = DATA_DIR / "refined"
 # Important file pathes
 COORDINATES_PATH = CONFIGS_DIR / "coordinates.csv"
 RAW_FORECASTS_PATH = RAW_DATA_DIR / "forecasts.json"
+RAW_ACTUALS_PATH = RAW_DATA_DIR / "actuals.json"
 TRANSFORMED_FORECASTS_PATH = TRANSFORMED_DATA_DIR / "forecasts.parquet"
 
 
