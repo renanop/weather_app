@@ -7,8 +7,10 @@ A modular ETL (Extract, Transform, Load) pipeline for fetching and processing we
 This project automates the ingestion of weather data for specific geographic locations and transforms it into a structured, high-performance Parquet format. It is designed for scalability and data integrity, using `pyarrow` schemas and robust retry logic.
 
 ### Architecture
-- **Extract (`fetch-forecasts`)**: Reads coordinates from `configs/coordinates.csv`, requests hourly data from the Open-Meteo API, and saves the raw JSON response to `data/raw/`.
-- **Transform (`transform-forecasts`)**: Reads the raw JSON, flattens the nested structures into a `pandas` DataFrame, converts time formats, and saves the result to `data/transformed/` as a Parquet file.
+- **Ingestion Engine (`engine.py`)**: A generic weather data extractor that handles coordinate-based API requests and city-name enrichment.
+- **Forecast Pipeline (`get-forecasts`)**: Fetches 14-day forecasts for the configured cities and saves to `data/raw/forecasts.json`.
+- **Actuals Pipeline (`get-actuals`)**: Fetches historical weather records from the archive API and saves to `data/raw/actuals.json`.
+- **Transform Pipeline (`transform-forecasts`)**: Reads raw JSON, flattens structures into a `pandas` DataFrame, and saves as Parquet.
 - **Data Integrity**: Enforces a strict schema (defined in `schemas.py`) during the transformation stage to ensure downstream consistency.
 
 ## Getting Started
@@ -27,13 +29,23 @@ uv sync
 
 The project uses `uv` to manage environment-safe execution.
 
-### 1. Ingest Data
-Fetches the latest forecasts for the configured cities.
+### 1. Ingest Forecasts
+Fetches the latest forecasts (default 14 days) for the configured cities.
 ```bash
-uv run fetch-forecasts
+uv run get-forecasts
+```
+**Options:**
+- `--start-date`: Start date in `YYYY-MM-DD` format.
+- `--end-date`: End date in `YYYY-MM-DD` format.
+- `--days`: Number of forecast days to fetch.
+
+### 2. Ingest Actuals (Historical Data)
+Fetches historical records from the Open-Meteo archive.
+```bash
+uv run get-actuals --start-date 2026-01-01 --end-date 2026-01-01
 ```
 
-### 2. Transform Data
+### 3. Transform Data
 Processes the raw forecasts into structured Parquet files.
 ```bash
 uv run transform-forecasts

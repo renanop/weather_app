@@ -24,6 +24,7 @@ dependencies = [
 [project.scripts]
 weather-app = "weather_app:main"
 get-forecasts = "weather_app.pipelines.ingest.get_forecasts:main"
+get-actuals = "weather_app.pipelines.ingest.get_actuals:main"
 transform-forecasts = "weather_app.pipelines.transform.transform_forecasts:main"
 
 [build-system]
