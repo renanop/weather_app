@@ -60,5 +60,14 @@ def run_get_forecasts_pipeline(input_path:Path, output_path:Path, config: APICon
 
 
 
+def main()->None:
+    """Entry point for the ingestion pipeline"""
+    run_get_forecasts_pipeline(
+        input_path=COORDINATES_PATH, 
+        output_path=RAW_FORECASTS_PATH, 
+        config=REQUEST_FORECASTS_CONFIG
+    )
+
+
 if __name__ == '__main__':
-    run_get_forecasts_pipeline(input_path=COORDINATES_PATH, output_path=RAW_FORECASTS_PATH, config=REQUEST_FORECASTS_CONFIG)
+    main()

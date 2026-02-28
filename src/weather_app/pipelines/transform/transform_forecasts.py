@@ -65,11 +65,16 @@ def run_transform_forecasts_pipeline(input_path: Path, output_path:Path, schema:
     save_parquet(data=df, output_path=output_path, schema=schema)
 
 
-if __name__=="__main__":
+def main()->None:
+    """Entry point for the transformation pipeline"""
     run_transform_forecasts_pipeline(
         input_path=RAW_FORECASTS_PATH, 
         output_path=TRANSFORMED_FORECASTS_PATH,
         schema=FORECASTS_TABLE_SCHEMA
-        )
+    )
+
+
+if __name__=="__main__":
+    main()
 
 
